@@ -196,9 +196,9 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
             digest_value_node.text = b64encode(cert_digest_bytes).decode()
 
             issuer_serial = SubElement(cert_node, xades_tag("IssuerSerial"), nsmap=self.namespaces)
-            issuer_serial_name = SubElement(issuer_serial, xades_tag("IssuerSerial"), nsmap=self.namespaces)
+            issuer_serial_name = SubElement(issuer_serial, xades_tag("X509IssuerName"), nsmap=self.namespaces)
             issuer_serial_name.text = "test1"
-            issuer_serial_number = SubElement(issuer_serial, xades_tag("IssuerSerial"), nsmap=self.namespaces)
+            issuer_serial_number = SubElement(issuer_serial, xades_tag("X509SerialNumber"), nsmap=self.namespaces)
             issuer_serial_number.text = "test2"
 
             print(321321, x509.Certificate.issuer)
