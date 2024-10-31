@@ -122,9 +122,7 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
         ]
         self.signature_policy = signature_policy
         self.claimed_roles = claimed_roles
-        if data_object_format is None:
-            data_object_format = XAdESDataObjectFormat()
-        self.data_object_format = data_object_format
+      
         self.namespaces.update(xades=namespaces.xades)
 
     @wraps(XMLSigner.sign)
