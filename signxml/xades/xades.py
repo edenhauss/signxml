@@ -189,6 +189,7 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
                 loaded_cert = x509.load_pem_x509_certificate(add_pem_header(cert))
             der_encoded_cert = loaded_cert.public_bytes(Encoding.DER)
             cert_digest_bytes = self._get_digest(der_encoded_cert, algorithm=self.digest_alg)
+
             cert_node = SubElement(signing_cert, xades_tag("Cert"), nsmap=self.namespaces)
             cert_digest = SubElement(cert_node, xades_tag("CertDigest"), nsmap=self.namespaces)
             SubElement(cert_digest, ds_tag("DigestMethod"), nsmap=self.namespaces, Algorithm=self.digest_alg.value)
@@ -199,7 +200,7 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
             issuer_serial_name = SubElement(issuer_serial, xades_tag("X509IssuerName"), nsmap=self.namespaces)
             issuer_serial_name.text = "test1"
             issuer_serial_number = SubElement(issuer_serial, xades_tag("X509SerialNumber"), nsmap=self.namespaces)
-            issuer_serial_number.text = "test2"
+            issuer_serial_number.text = loaded_cert.serial_number
 
             print(321321, x509.Certificate.issuer)
             #issuer_serial_number = loaded_cert.get_serial_number()
