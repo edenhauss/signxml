@@ -178,7 +178,7 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
 
     def add_signing_certificate(self, signed_signature_properties, sig_root, signing_settings: SigningSettings):
         # TODO: check if we need to support SigningCertificate
-        signing_cert_v2 = SubElement(
+        signing_cert = SubElement(
             signed_signature_properties, xades_tag("SigningCertificate"), nsmap=self.namespaces
         )
         assert signing_settings.cert_chain is not None
@@ -189,16 +189,18 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
                 loaded_cert = x509.load_pem_x509_certificate(add_pem_header(cert))
             der_encoded_cert = loaded_cert.public_bytes(Encoding.DER)
             cert_digest_bytes = self._get_digest(der_encoded_cert, algorithm=self.digest_alg)
-            cert_node = SubElement(signing_cert_v2, xades_tag("Cert"), nsmap=self.namespaces)
+            cert_node = SubElement(signing_cert, xades_tag("Cert"), nsmap=self.namespaces)
             cert_digest = SubElement(cert_node, xades_tag("CertDigest"), nsmap=self.namespaces)
             SubElement(cert_digest, ds_tag("DigestMethod"), nsmap=self.namespaces, Algorithm=self.digest_alg.value)
             digest_value_node = SubElement(cert_digest, ds_tag("DigestValue"), nsmap=self.namespaces)
             digest_value_node.text = b64encode(cert_digest_bytes).decode()
 
-            # issuer_serial_number = loaded_cert.get_serial_number()
-            # issuer_serial_bytes = long_to_bytes(issuer_serial_number)
-            # issuer_serial_v2 = SubElement(cert_node, xades_tag("IssuerSerialV2"), nsmap=self.namespaces)
-            # issuer_serial_v2.text = b64encode(issuer_serial_bytes).decode()
+
+            print(321321, x509.Certificate.issuer)
+            #issuer_serial_number = loaded_cert.get_serial_number()
+            #issuer_serial_bytes = long_to_bytes(issuer_serial_number)
+            #issuer_serial_v2 = SubElement(cert_node, xades_tag("IssuerSerialV2"), nsmap=self.namespaces)
+            #issuer_serial_v2.text = b64encode(issuer_serial_bytes).decode()
 
     def add_signature_policy_identifier(self, signed_signature_properties, sig_root, signing_settings: SigningSettings):
         if self.signature_policy is not None:
