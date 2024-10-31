@@ -186,14 +186,9 @@ SignXML supports signing and verifying documents using `XAdES <https://en.wikipe
         DigestMethod=DigestAlgorithm.SHA256,
         DigestValue="Ohixl6upD6av8N7pEvDABhEL6hM=",
     )
-    data_object_format = XAdESDataObjectFormat(
-        Description="My XAdES signature",
-        MimeType="text/xml",
-    )
     signer = XAdESSigner(
         signature_policy=signature_policy,
         claimed_roles=["signer"],
-        data_object_format=data_object_format,
         c14n_algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315",
     )
     signed_doc = signer.sign(doc, key=private_key, cert=certificate)

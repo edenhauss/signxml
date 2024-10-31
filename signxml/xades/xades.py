@@ -91,9 +91,6 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
     :param claimed_roles:
         If you need your XAdES signature to carry the **SignerRole/ClaimedRoles** element, use this parameter to pass a
         list of strings to use as text for the **ClaimedRole** tags.
-    :param data_object_format:
-        If you need your XAdES signature to carry the **DataObjectFormat** element, use this parameter to pass a
-        :class:`XAdESDataObjectFormat` object carrying the Description and MimeType strings for the element.
     :param xml_signer_args:
         Parameters to pass to the :class:`signxml.XMLSigner` constructor.
     """
@@ -102,7 +99,6 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
         self,
         signature_policy: Optional[XAdESSignaturePolicy] = None,
         claimed_roles: Optional[List] = None,
-        data_object_format: Optional[XAdESDataObjectFormat] = None,
         **xml_signer_args,
     ) -> None:
         super().__init__(**xml_signer_args)
@@ -243,23 +239,6 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
         for claimed_role in self.claimed_roles:
             claimed_role_node = SubElement(claimed_roles, xades_tag("ClaimedRole"), nsmap=self.namespaces)
             claimed_role_node.text = claimed_role
-
-    def add_data_object_format(self, signed_data_object_properties, sig_root, signing_settings: SigningSettings):
-        signed_info = self._find(sig_root, "ds:SignedInfo")
-        reference = self._find(signed_info, "ds:Reference")
-        if "Id" not in reference.keys():
-            reference.set("Id", f"SignXMLReference{self._get_token()}")
-        data_object_format = SubElement(
-            signed_data_object_properties,
-            xades_tag("DataObjectFormat"),
-            nsmap=self.namespaces,
-            ObjectReference=f"#{reference.get('Id')}",
-        )
-        description = SubElement(data_object_format, xades_tag("Description"), nsmap=self.namespaces)
-        description.text = self.data_object_format.Description
-        mime_type = SubElement(data_object_format, xades_tag("MimeType"), nsmap=self.namespaces)
-        mime_type.text = self.data_object_format.MimeType
-
 
 class XAdESVerifier(XAdESProcessor, XMLVerifier):
     """

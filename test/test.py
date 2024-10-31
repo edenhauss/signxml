@@ -723,7 +723,6 @@ class TestXAdES(unittest.TestCase, LoadExampleKeys):
         DigestValue="sVHhN1eqNH/PZ1B6h//ehyC1OwRQOrz/tJ3ZYaRrBgA=",
     )
     claimed_roles = ["signer"]
-    data_object_format = XAdESDataObjectFormat(Description="Important Document", MimeType="text/xml")
 
     def test_xades_roundtrip(self):
         cert, key = self.load_example_keys()
@@ -731,8 +730,7 @@ class TestXAdES(unittest.TestCase, LoadExampleKeys):
             doc = etree.parse(fh)
         signer = XAdESSigner(
             signature_policy=self.signature_policy,
-            claimed_roles=self.claimed_roles,
-            data_object_format=self.data_object_format,
+            claimed_roles=self.claimed_roles
         )
         signed_doc = signer.sign(doc, key=key, cert=cert)
 
