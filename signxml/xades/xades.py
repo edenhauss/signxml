@@ -290,15 +290,11 @@ class XAdESVerifier(XAdESProcessor, XMLVerifier):
         )
         signed_signature_props = self._find(verify_result.signed_xml, "xades:SignedSignatureProperties")
         signing_cert = self._find(signed_signature_props, "xades:SigningCertificate", require=False)
-        signing_cert_v2 = self._find(signed_signature_props, "xades:SigningCertificate", require=False)
-        if signing_cert is None and signing_cert_v2 is None:
-            raise InvalidInput("Expected to find XML element xades:SigningCertificate")
-        if signing_cert is not None and signing_cert_v2 is not None:
-            raise InvalidInput("Expected to find exactly xades:SigningCertificate")
+
         if signing_cert is not None:
             self._verify_cert_digest(signing_cert, expect_cert=cert_from_key_info)
-        elif signing_cert_v2 is not None:
-            self._verify_cert_digest(signing_cert_v2, expect_cert=cert_from_key_info)
+        else:
+            raise InvalidInput("Expected to find XML element xades:SigningCertificate")
 
     def _verify_signature_policy(self, verify_result: VerifyResult, expect_signature_policy: XAdESSignaturePolicy):
         signed_signature_props = self._find(verify_result.signed_xml, "xades:SignedSignatureProperties")
