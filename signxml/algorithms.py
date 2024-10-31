@@ -117,6 +117,7 @@ class SignatureMethod(FragmentLookupMixin, InvalidInputErrorMixin, Enum):
     SHA256_RSA_MGF1 = "http://www.w3.org/2007/05/xmldsig-more#sha256-rsa-MGF1"
     SHA384_RSA_MGF1 = "http://www.w3.org/2007/05/xmldsig-more#sha384-rsa-MGF1"
     SHA512_RSA_MGF1 = "http://www.w3.org/2007/05/xmldsig-more#sha512-rsa-MGF1"
+    GOST_3411_2012_256 = "urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256"
 
     DSA_SHA1 = "http://www.w3.org/2000/09/xmldsig#dsa-sha1"
     """

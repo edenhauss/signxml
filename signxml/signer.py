@@ -271,6 +271,7 @@ class XMLSigner(XMLSignatureProcessor):
                 signature = long_to_bytes(r, blocksize=int_len) + long_to_bytes(s, blocksize=int_len)
 
             signature_value_node.text = b64encode(signature).decode()
+        
         else:
             raise NotImplementedError()
 
