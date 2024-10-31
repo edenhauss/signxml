@@ -113,9 +113,6 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
             self.add_signature_production_place,
             self.add_signer_role,
         ]
-        self.signed_data_object_properties_annotators = [
-            self.add_data_object_format,
-        ]
         self.signature_policy = signature_policy
         self.claimed_roles = claimed_roles
       
@@ -156,11 +153,7 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
         )
         for ssp_annotator in self.signed_signature_properties_annotators:
             ssp_annotator(signed_signature_properties, sig_root=sig_root, signing_settings=signing_settings)
-        signed_data_object_properties = SubElement(
-            signed_properties, xades_tag("SignedDataObjectProperties"), nsmap=self.namespaces
-        )
-        for dop_annotator in self.signed_data_object_properties_annotators:
-            dop_annotator(signed_data_object_properties, sig_root=sig_root, signing_settings=signing_settings)
+     
         self._add_reference_to_signed_info(
             sig_root, signed_properties, Type="http://uri.etsi.org/01903#SignedProperties"
         )
