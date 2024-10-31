@@ -192,7 +192,7 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
     def add_signing_certificate(self, signed_signature_properties, sig_root, signing_settings: SigningSettings):
         # TODO: check if we need to support SigningCertificate
         signing_cert_v2 = SubElement(
-            signed_signature_properties, xades_tag("SigningCertificateV2"), nsmap=self.namespaces
+            signed_signature_properties, xades_tag("SigningCertificate"), nsmap=self.namespaces
         )
         assert signing_settings.cert_chain is not None
         for cert in signing_settings.cert_chain:
@@ -290,11 +290,11 @@ class XAdESVerifier(XAdESProcessor, XMLVerifier):
         )
         signed_signature_props = self._find(verify_result.signed_xml, "xades:SignedSignatureProperties")
         signing_cert = self._find(signed_signature_props, "xades:SigningCertificate", require=False)
-        signing_cert_v2 = self._find(signed_signature_props, "xades:SigningCertificateV2", require=False)
+        signing_cert_v2 = self._find(signed_signature_props, "xades:SigningCertificate", require=False)
         if signing_cert is None and signing_cert_v2 is None:
-            raise InvalidInput("Expected to find XML element xades:SigningCertificate or xades:SigningCertificateV2")
+            raise InvalidInput("Expected to find XML element xades:SigningCertificate")
         if signing_cert is not None and signing_cert_v2 is not None:
-            raise InvalidInput("Expected to find exactly one of xades:SigningCertificate or xades:SigningCertificateV2")
+            raise InvalidInput("Expected to find exactly xades:SigningCertificate")
         if signing_cert is not None:
             self._verify_cert_digest(signing_cert, expect_cert=cert_from_key_info)
         elif signing_cert_v2 is not None:
