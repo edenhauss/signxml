@@ -198,11 +198,10 @@ class XAdESSigner(XAdESProcessor, XMLSigner):
 
             issuer_serial = SubElement(cert_node, xades_tag("IssuerSerial"), nsmap=self.namespaces)
             issuer_serial_name = SubElement(issuer_serial, xades_tag("X509IssuerName"), nsmap=self.namespaces)
-            issuer_serial_name.text = "test1"
+            issuer_serial_name.text = loaded_cert.issuer
             issuer_serial_number = SubElement(issuer_serial, xades_tag("X509SerialNumber"), nsmap=self.namespaces)
             issuer_serial_number.text = str(loaded_cert.serial_number)
-
-            print(321321, x509.Certificate.issuer, loaded_cert.serial_number, type(loaded_cert.serial_number))
+            
             #issuer_serial_number = loaded_cert.get_serial_number()
             #issuer_serial_bytes = long_to_bytes(issuer_serial_number)
             #issuer_serial_v2 = SubElement(cert_node, xades_tag("IssuerSerialV2"), nsmap=self.namespaces)
